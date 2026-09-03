@@ -3,4 +3,5 @@
 
 def add(left: int, right: int) -> int:
     """Return the sum of two integers."""
+    # Both operands are ints, so the result is also an int.
     return left + right
