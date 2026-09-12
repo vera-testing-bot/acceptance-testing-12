@@ -6,6 +6,11 @@ def add(left: int, right: int) -> int:
     return left + right
 
 
+def subtract(left: int, right: int) -> int:
+    """Return the difference of two integers."""
+    return left - right
+
+
 def truncate(value: str, max_length: int, suffix: str = "") -> str:
     """Return ``value`` truncated to at most ``max_length`` characters.
 
@@ -18,5 +23,7 @@ def truncate(value: str, max_length: int, suffix: str = "") -> str:
         raise ValueError("max_length must be non-negative")
     if len(value) <= max_length:
         return value
-    cut = max(0, max_length - len(suffix))
+    if len(suffix) >= max_length:
+        return suffix[:max_length]
+    cut = max_length - len(suffix)
     return value[:cut] + suffix

@@ -12,6 +12,12 @@ def test_add() -> None:
     assert add(2, 3) == 5
 
 
+def test_subtract() -> None:
+    from shard_app import subtract
+
+    assert subtract(5, 3) == 2
+
+
 def test_truncate_short_string_unchanged() -> None:
     assert truncate("hello", 10) == "hello"
 
@@ -30,7 +36,13 @@ def test_truncate_long_string_with_suffix() -> None:
     assert len(result) == 8
 
 
-def test_truncate_suffix_exceeds_max_length() -> None:
+def test_truncate_suffix_fits_within_max_length() -> None:
     result = truncate("hello world", 3, suffix="…")
     assert result == "he…"
     assert len(result) == 3
+
+
+def test_truncate_suffix_exceeds_max_length() -> None:
+    result = truncate("hello world", 2, suffix="...")
+    assert len(result) <= 2
+    assert result == ".."
