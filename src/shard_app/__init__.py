@@ -6,6 +6,11 @@ def add(left: int, right: int) -> int:
     return left + right
 
 
+def multiply(left: int, right: int) -> int:
+    """Return the product of two integers."""
+    return left * right
+
+
 def truncate(text: str, max_length: int) -> str:
     """Return ``text`` trimmed to ``max_length`` characters.
 
