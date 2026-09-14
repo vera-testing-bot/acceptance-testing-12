@@ -7,11 +7,15 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from shard_app import add, validate_timeouts
+from shard_app import add, multiply, validate_timeouts  # noqa: E402
 
 
 def test_add() -> None:
     assert add(2, 3) == 5
+
+
+def test_multiply() -> None:
+    assert multiply(2, 3) == 6
 
 
 def test_validate_timeouts_rejects_bad_combination() -> None:
