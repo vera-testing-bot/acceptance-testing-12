@@ -21,3 +21,13 @@ def test_render_display_shows_given_value() -> None:
 
 def test_render_display_blank_falls_back_to_zero() -> None:
     assert "0" in render_display("")
+
+
+def test_render_display_routes_values_through_formatting_helper() -> None:
+    # A value with thousands separators proves the display uses format_value
+    # rather than emitting the raw input.
+    assert "1,234,567" in render_display("1234567")
+
+
+def test_render_display_invalid_input_shows_error() -> None:
+    assert "Error" in render_display("not-a-number")

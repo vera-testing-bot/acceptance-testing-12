@@ -8,6 +8,8 @@ phases hang formatting and accessibility off this single component.
 
 from __future__ import annotations
 
+from shard_app.formatting import format_value
+
 DISPLAY_CLASS = "calculator-display"
 DISPLAY_ID = "display"
 FALLBACK_VALUE = "0"
@@ -16,7 +18,8 @@ FALLBACK_VALUE = "0"
 def render_display(value: str = FALLBACK_VALUE) -> str:
     """Render the display markup for a calculator value.
 
-    A blank value falls back to ``0`` so the display never renders empty.
+    Every value is routed through :func:`format_value` so formatting lives
+    in a single helper; a blank value falls back to ``0``.
     """
-    text = value if value else FALLBACK_VALUE
+    text = format_value(value)
     return f'<div class="{DISPLAY_CLASS}" id="{DISPLAY_ID}" role="status">{text}</div>'
