@@ -17,6 +17,7 @@ from.
 
 from __future__ import annotations
 
+import copy
 import json
 from collections import deque
 from collections.abc import Mapping
@@ -109,12 +110,12 @@ def migrate(blob: Mapping[str, Any]) -> dict[str, Any]:
         raw = dict(blob)
         data = {key: raw.pop(key) for key in list(raw) if key in DEFAULTS}
         # Any stray keys are dropped: they were never part of the schema.
-        data.setdefault("display", DEFAULTS["display"])
-        data.setdefault("history", DEFAULTS["history"])
+        data.setdefault("display", copy.deepcopy(DEFAULTS["display"]))
+        data.setdefault("history", copy.deepcopy(DEFAULTS["history"]))
         data["accumulator"] = float(
             raw.pop("acc", data.get("accumulator", DEFAULTS["accumulator"]))
         )
-        data.setdefault("settings", DEFAULTS["settings"])
+        data.setdefault("settings", copy.deepcopy(DEFAULTS["settings"]))
         return {"version": SCHEMA_VERSION, "data": _normalize(data)}
 
     version = blob["version"]
@@ -124,15 +125,15 @@ def migrate(blob: Mapping[str, Any]) -> dict[str, Any]:
         # guarantee a ``settings`` slot exists.
         if "acc" in data:
             data["accumulator"] = float(data.pop("acc"))
-        data.setdefault("settings", DEFAULTS["settings"])
-    data.setdefault("display", DEFAULTS["display"])
+        data.setdefault("settings", copy.deepcopy(DEFAULTS["settings"]))
+    data.setdefault("display", copy.deepcopy(DEFAULTS["display"]))
     data.setdefault("accumulator", DEFAULTS["accumulator"])
-    data.setdefault("history", DEFAULTS["history"])
+    data.setdefault("history", copy.deepcopy(DEFAULTS["history"]))
     return {"version": SCHEMA_VERSION, "data": _normalize(data)}
 
 
 def _normalize(data: Mapping[str, Any]) -> dict[str, Any]:
-    out = dict(DEFAULTS)
+    out = copy.deepcopy(DEFAULTS)
     for key, value in data.items():
         if key in SCHEMA:
             out[key] = _coerce(key, value)
@@ -145,7 +146,7 @@ class Store:
 
     backend: Backend
     max_transitions: int = _MAX_TRANSITIONS
-    _state: dict[str, Any] = field(default_factory=lambda: dict(DEFAULTS))
+    _state: dict[str, Any] = field(default_factory=lambda: copy.deepcopy(DEFAULTS))
     _log: deque[Transition] = field(default_factory=deque)
 
     def get(self, key: str) -> Any:
@@ -171,7 +172,7 @@ class Store:
     def load(self) -> None:
         blob = self.backend.load()
         if blob is None:
-            self._state = dict(DEFAULTS)
+            self._state = copy.deepcopy(DEFAULTS)
             return
         migrated = migrate(json.loads(blob))
         self._state = migrated["data"]

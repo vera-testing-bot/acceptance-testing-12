@@ -57,6 +57,13 @@ def test_set_coerces_int_to_float_for_float_field() -> None:
     assert isinstance(store.get("accumulator"), float)
 
 
+@pytest.mark.parametrize("flag", [True, False])
+def test_set_rejects_bool_for_float_field(flag: bool) -> None:
+    store = Store(InMemoryBackend())
+    with pytest.raises(WrongTypeError):
+        store.set("accumulator", flag, writer="calc")
+
+
 def test_persist_then_reload_preserves_state() -> None:
     backend = InMemoryBackend()
     store = Store(backend)
