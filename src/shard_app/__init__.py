@@ -6,6 +6,11 @@ def add(left: int, right: int) -> int:
     return left + right
 
 
+def subtract(left: int, right: int) -> int:
+    """Return the difference of two integers (``left`` minus ``right``)."""
+    return left - right
+
+
 def truncate(text: str, max_length: int, ellipsis: str = "...") -> str:
     """Return ``text`` truncated to ``max_length`` characters.
 
