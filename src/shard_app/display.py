@@ -19,7 +19,12 @@ def render_display(value: str = FALLBACK_VALUE) -> str:
     """Render the display markup for a calculator value.
 
     Every value is routed through :func:`format_value` so formatting lives
-    in a single helper; a blank value falls back to ``0``.
+    in a single helper; a blank value falls back to ``0``. The display
+    carries an ``aria-live`` region so screen readers announce updates;
+    the attribute is non-visual, so rendering is unchanged.
     """
     text = format_value(value)
-    return f'<div class="{DISPLAY_CLASS}" id="{DISPLAY_ID}" role="status">{text}</div>'
+    return (
+        f'<div class="{DISPLAY_CLASS}" id="{DISPLAY_ID}"'
+        f' role="status" aria-live="polite">{text}</div>'
+    )

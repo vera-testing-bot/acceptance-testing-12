@@ -31,3 +31,20 @@ def test_render_display_routes_values_through_formatting_helper() -> None:
 
 def test_render_display_invalid_input_shows_error() -> None:
     assert "Error" in render_display("not-a-number")
+
+
+def test_render_display_announces_updates_to_screen_readers() -> None:
+    # The display must carry an aria-live region so screen readers announce
+    # value changes; role=status is the complementary landmark.
+    html = render_display("123")
+    assert 'aria-live="polite"' in html
+    assert 'role="status"' in html
+
+
+def test_render_display_accessibility_adds_no_visual_markup() -> None:
+    # Accessibility attributes must not change the visible structure: the
+    # display is still a single element wrapping the formatted value.
+    html = render_display("42")
+    assert html.count("<div") == 1
+    assert html.count("</div>") == 1
+    assert ">42</div>" in html
