@@ -35,3 +35,16 @@ def test_format_value_invalid_input_reports_error() -> None:
 
 def test_format_value_leading_zero_decimal_preserved() -> None:
     assert format_value("0.5") == "0.5"
+
+
+def test_format_value_large_integer_preserves_precision() -> None:
+    assert format_value("99999999999999999999") == "99,999,999,999,999,999,999"
+
+
+def test_format_value_nan_reports_error() -> None:
+    assert format_value("nan") == "Error"
+
+
+def test_format_value_inf_reports_error() -> None:
+    assert format_value("inf") == "Error"
+    assert format_value("-inf") == "Error"
